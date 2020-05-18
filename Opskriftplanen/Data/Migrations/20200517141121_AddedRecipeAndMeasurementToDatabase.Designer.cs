@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Opskriftplanen.Data;
 
 namespace Opskriftplanen.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200517141121_AddedRecipeAndMeasurementToDatabase")]
+    partial class AddedRecipeAndMeasurementToDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -235,53 +237,6 @@ namespace Opskriftplanen.Data.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("Opskriftplanen.Models.Ingredient", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("IngredientName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Ingredient");
-                });
-
-            modelBuilder.Entity("Opskriftplanen.Models.IngredientCollection", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("IngredientId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MeasurmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MeasurmentUnitId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RecipesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IngredientId");
-
-                    b.HasIndex("MeasurmentId");
-
-                    b.HasIndex("MeasurmentUnitId");
-
-                    b.HasIndex("RecipesId");
-
-                    b.ToTable("IngredientCollection");
-                });
-
             modelBuilder.Entity("Opskriftplanen.Models.Measurment", b =>
                 {
                     b.Property<int>("Id")
@@ -289,27 +244,23 @@ namespace Opskriftplanen.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Ingredient")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Measures")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int?>("MeasurmentId")
+                        .HasColumnType("int");
 
-                    b.ToTable("Measurment");
-                });
-
-            modelBuilder.Entity("Opskriftplanen.Models.MeasurmentUnit", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("MeasurUnit")
+                    b.Property<string>("MeasurmentName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("MeasurmentUnit");
+                    b.HasIndex("MeasurmentId");
+
+                    b.ToTable("Measurment");
                 });
 
             modelBuilder.Entity("Opskriftplanen.Models.Recipes", b =>
@@ -328,7 +279,7 @@ namespace Opskriftplanen.Data.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IngredientCollectionsId")
+                    b.Property<int>("MeasurmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -341,6 +292,8 @@ namespace Opskriftplanen.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("MeasurmentId");
 
                     b.ToTable("Recipe");
                 });
@@ -396,31 +349,11 @@ namespace Opskriftplanen.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Opskriftplanen.Models.IngredientCollection", b =>
+            modelBuilder.Entity("Opskriftplanen.Models.Measurment", b =>
                 {
-                    b.HasOne("Opskriftplanen.Models.Ingredient", "Ingredient")
-                        .WithMany("IngredientCollection")
-                        .HasForeignKey("IngredientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Opskriftplanen.Models.Measurment", "Measurment")
-                        .WithMany("IngredientCollection")
-                        .HasForeignKey("MeasurmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Opskriftplanen.Models.MeasurmentUnit", "MeasurmentUnit")
-                        .WithMany("IngredientCollection")
-                        .HasForeignKey("MeasurmentUnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Opskriftplanen.Models.Recipes", "Recipes")
-                        .WithMany("IngredientCollection")
-                        .HasForeignKey("RecipesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Opskriftplanen.Models.Measurment", null)
+                        .WithMany("Measurments")
+                        .HasForeignKey("MeasurmentId");
                 });
 
             modelBuilder.Entity("Opskriftplanen.Models.Recipes", b =>
@@ -428,6 +361,12 @@ namespace Opskriftplanen.Data.Migrations
                     b.HasOne("Opskriftplanen.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Opskriftplanen.Models.Measurment", "Measurment")
+                        .WithMany()
+                        .HasForeignKey("MeasurmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

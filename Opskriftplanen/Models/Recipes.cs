@@ -20,11 +20,10 @@ namespace Opskriftplanen.Models
 
         public string Image { get; set; }
 
-        [Display(Name = "Measurment")]
-        public int MeasurmentId { get; set; }
+        [ForeignKey("IngredientCollectionsId")]
+        public int IngredientCollectionsId { get; set; }
 
-        [ForeignKey("MeasurmentId")]
-        public virtual Measurment Measurment { get; set; }
+        public virtual ICollection<IngredientCollection> IngredientCollection { get; set; }
 
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
