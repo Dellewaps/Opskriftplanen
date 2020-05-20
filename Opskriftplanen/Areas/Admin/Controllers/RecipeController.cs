@@ -31,9 +31,11 @@ namespace Opskriftplanen.Areas.Admin.Controllers
             _webHostEnvironment = webHostEnvironment;
             RecipeVM = new RecipeViewModel()
             {
+                ingredientCollection = new IngredientCollection(),
+                Ingredient = _db.Ingredient,
+                MeasurmentUnit = _db.MeasurmentUnit,
                 category = _db.Category,
-                measurment = _db.Measurment,
-                Recipes = new Models.Recipes()
+                Recipes = new Recipes()
             };
         }
         public async Task<IActionResult> Index()
@@ -44,6 +46,7 @@ namespace Opskriftplanen.Areas.Admin.Controllers
 
         public IActionResult Create()
         {
+            //RecipeVM.Ingredient = _db.Ingredient;
             return View(RecipeVM);
         }
 
@@ -55,6 +58,11 @@ namespace Opskriftplanen.Areas.Admin.Controllers
             {
                 return View(RecipeVM);
             }
+            
+            //for(int i = 0; i < RecipeVM.Ingredient.Count(); i++)
+            //{
+
+            //}
 
             _db.Recipe.Add(RecipeVM.Recipes);
             await _db.SaveChangesAsync();
@@ -99,7 +107,7 @@ namespace Opskriftplanen.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            RecipeVM.Recipes = await _db.Recipe.Include(m => m.Category).SingleOrDefaultAsync(m => m.Id == id);
+            RecipeVM.Recipes = await _db.Recipe.Include(m => m.Category).Include(m => m.IngredientCollection.Where(m => m.RecipesId == id)).SingleOrDefaultAsync(m => m.Id == id);
 
             if (RecipeVM.Recipes == null)
             {
@@ -170,7 +178,7 @@ namespace Opskriftplanen.Areas.Admin.Controllers
                 NotFound();
             }
 
-            RecipeVM.Recipes = await _db.Recipe.Include(g => g.Category).SingleOrDefaultAsync(m => m.Id == id);
+            RecipeVM.Recipes = await _db.Recipe.Include(g => g.Category).Include(i => i.IngredientCollection.Where(i => i.RecipesId == id)).SingleOrDefaultAsync(m => m.Id == id);
 
             if (RecipeVM.Recipes == null)
             {
@@ -187,7 +195,7 @@ namespace Opskriftplanen.Areas.Admin.Controllers
                 NotFound();
             }
 
-            RecipeVM.Recipes = await _db.Recipe.Include(g => g.Category).SingleOrDefaultAsync(m => m.Id == id);
+            RecipeVM.Recipes = await _db.Recipe.Include(g => g.Category).Include(i => i.IngredientCollection.Where(i => i.RecipesId == id)).SingleOrDefaultAsync(m => m.Id == id);
 
             if (RecipeVM.Recipes == null)
             {

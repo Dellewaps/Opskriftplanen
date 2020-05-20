@@ -30,5 +30,8 @@ namespace Opskriftplanen.Models
 
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
+
+        
+
     }
 }

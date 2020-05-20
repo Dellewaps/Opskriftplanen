@@ -9,7 +9,7 @@ namespace Opskriftplanen.Models
     {
         public int Id { get; set; }
 
-        public string MeasurUnit { get; set; }
+        public string Name { get; set; }
 
         public virtual ICollection<IngredientCollection> IngredientCollection { get; set; }
     }
