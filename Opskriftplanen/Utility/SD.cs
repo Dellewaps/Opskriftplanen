@@ -7,6 +7,9 @@ namespace Opskriftplanen.Utility
 {
     public class SD
     {
-        public const string DefaultMovieImage = "Default.png";
+        public const string DefaultRecipeImage = "Default-Copy.png";
+
+        public const string Admin = "Administrator";
+        public const string EndUser = "Bruger";
     }
 }

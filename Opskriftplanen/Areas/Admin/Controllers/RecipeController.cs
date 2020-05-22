@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Opskriftplanen.Data;
+using Opskriftplanen.Extensions;
 using Opskriftplanen.Models;
 using Opskriftplanen.Models.ViewModels;
 using Opskriftplanen.Utility;
@@ -46,7 +48,7 @@ namespace Opskriftplanen.Areas.Admin.Controllers
 
         public IActionResult Create()
         {
-            //RecipeVM.Ingredient = _db.Ingredient;
+            
             return View(RecipeVM);
         }
 
@@ -58,21 +60,30 @@ namespace Opskriftplanen.Areas.Admin.Controllers
             {
                 return View(RecipeVM);
             }
+
             
-            //for(int i = 0; i < RecipeVM.Ingredient.Count(); i++)
-            //{
-
-            //}
-
             _db.Recipe.Add(RecipeVM.Recipes);
             await _db.SaveChangesAsync();
 
-            //Saveing image
+            
+            var RecipeFromDb = await _db.Recipe.FindAsync(RecipeVM.Recipes.Id);
 
+            for (int i = 0; i < this.Request.Form["ingredient"].Count(); i++)
+            {
+                IngredientCollection c = new IngredientCollection();
+                c.RecipesId = RecipeFromDb.Id;
+                c.IngredientId = Convert.ToInt32(this.Request.Form["ingredient"][i]);
+                c.Measur = Convert.ToInt32(this.Request.Form["measure"][i]);
+                c.MeasurmentUnitId = Convert.ToInt32(this.Request.Form["measurmenUnit"][i]);
+                _db.IngredientCollection.Add(c);
+            }
+
+            await _db.SaveChangesAsync();
+
+            //Saveing image
             string webRootPath = _webHostEnvironment.WebRootPath;
             var files = HttpContext.Request.Form.Files;
-
-            var MovieItemFromDb = await _db.Recipe.FindAsync(RecipeVM.Recipes.Id);
+            
 
             if (files.Count > 0)
             {
@@ -84,15 +95,15 @@ namespace Opskriftplanen.Areas.Admin.Controllers
                 {
                     files[0].CopyTo(filesStream);
                 }
-                MovieItemFromDb.Image = @"\images\" + RecipeVM.Recipes.Id + extension;
+                RecipeFromDb.Image = @"\images\" + RecipeVM.Recipes.Id + extension;
 
             }
             else
             {
                 //If no image was uploaded, so use default image
-                var uploads = Path.Combine(webRootPath, @"images\" + SD.DefaultMovieImage);
+                var uploads = Path.Combine(webRootPath, @"images\" + SD.DefaultRecipeImage);
                 System.IO.File.Copy(uploads, webRootPath + @"\images\" + RecipeVM.Recipes.Id + ".png");
-                MovieItemFromDb.Image = @"\images\" + RecipeVM.Recipes.Id + ".png";
+                RecipeFromDb.Image = @"\images\" + RecipeVM.Recipes.Id + ".png";
             }
 
             await _db.SaveChangesAsync();
@@ -107,7 +118,10 @@ namespace Opskriftplanen.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            RecipeVM.Recipes = await _db.Recipe.Include(m => m.Category).Include(m => m.IngredientCollection.Where(m => m.RecipesId == id)).SingleOrDefaultAsync(m => m.Id == id);
+            RecipeVM.Recipes = await _db.Recipe.Include(m => m.Category).SingleOrDefaultAsync(m => m.Id == id);
+
+            RecipeVM.ingredientCollections = _db.IngredientCollection.Where(m => m.RecipesId == id).Include(m => m.Ingredient).Include(m => m.MeasurmentUnit);
+            
 
             if (RecipeVM.Recipes == null)
             {
@@ -129,15 +143,27 @@ namespace Opskriftplanen.Areas.Admin.Controllers
                 return View(RecipeVM);
             }
 
+            var RecipeFromDb = await _db.Recipe.FindAsync(RecipeVM.Recipes.Id);
+            var ingredientCollection = _db.IngredientCollection.Where(m => m.RecipesId == id);
 
+            for (int i = 0; i < this.Request.Form["ingredient"].Count(); i++)
+            {
+                IngredientCollection c = new IngredientCollection();
+                c.RecipesId = RecipeFromDb.Id;
+                c.IngredientId = Convert.ToInt32(this.Request.Form["ingredient"][i]);
+                c.Measur = Convert.ToInt32(this.Request.Form["measure"][i]);
+                c.MeasurmentUnitId = Convert.ToInt32(this.Request.Form["measurmenUnit"][i]);
+                _db.IngredientCollection.Add(c);
+            }
+
+            await _db.SaveChangesAsync();
 
             //Saveing image
 
             string webRootPath = _webHostEnvironment.WebRootPath;
             var files = HttpContext.Request.Form.Files;
 
-            var RecipeFromDb = await _db.Recipe.FindAsync(RecipeVM.Recipes.Id);
-
+            
             if (files.Count > 0)
             {
                 //New image has been uploaded 
@@ -166,6 +192,14 @@ namespace Opskriftplanen.Areas.Admin.Controllers
             RecipeFromDb.Description = RecipeVM.Recipes.Description;
             RecipeFromDb.PersonCount = RecipeVM.Recipes.PersonCount;
             RecipeFromDb.CategoryId = RecipeVM.Recipes.CategoryId;
+
+            foreach (var item in ingredientCollection)
+            {
+                item.IngredientId = RecipeVM.ingredientCollection.IngredientId;
+                item.Measur = RecipeVM.ingredientCollection.Measur;
+                item.MeasurmentUnitId = RecipeVM.ingredientCollection.MeasurmentUnitId;
+            }
+
             await _db.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
@@ -178,7 +212,8 @@ namespace Opskriftplanen.Areas.Admin.Controllers
                 NotFound();
             }
 
-            RecipeVM.Recipes = await _db.Recipe.Include(g => g.Category).Include(i => i.IngredientCollection.Where(i => i.RecipesId == id)).SingleOrDefaultAsync(m => m.Id == id);
+            RecipeVM.Recipes = await _db.Recipe.Include(g => g.Category).SingleOrDefaultAsync(m => m.Id == id);
+            RecipeVM.ingredientCollections = _db.IngredientCollection.Where(m => m.RecipesId == id).Include(m => m.Ingredient).Include(m => m.MeasurmentUnit);
 
             if (RecipeVM.Recipes == null)
             {
@@ -195,7 +230,8 @@ namespace Opskriftplanen.Areas.Admin.Controllers
                 NotFound();
             }
 
-            RecipeVM.Recipes = await _db.Recipe.Include(g => g.Category).Include(i => i.IngredientCollection.Where(i => i.RecipesId == id)).SingleOrDefaultAsync(m => m.Id == id);
+            RecipeVM.Recipes = await _db.Recipe.Include(g => g.Category).SingleOrDefaultAsync(m => m.Id == id);
+            RecipeVM.ingredientCollections = _db.IngredientCollection.Where(m => m.RecipesId == id).Include(m => m.Ingredient).Include(m => m.MeasurmentUnit);
 
             if (RecipeVM.Recipes == null)
             {
@@ -212,6 +248,8 @@ namespace Opskriftplanen.Areas.Admin.Controllers
             string webRootPath = _webHostEnvironment.WebRootPath;
 
             Recipes recipes = await _db.Recipe.FindAsync(id);
+            var ingredientCollection = _db.IngredientCollection.Where(m => m.RecipesId == id).ToList();
+            
 
             if (recipes != null)
             {
@@ -221,6 +259,12 @@ namespace Opskriftplanen.Areas.Admin.Controllers
                 {
                     System.IO.File.Delete(imagePath);
                 }
+
+                foreach(var item in ingredientCollection)
+                {
+                    _db.IngredientCollection.Remove(item);
+                }
+
 
                 _db.Recipe.Remove(recipes);
                 await _db.SaveChangesAsync();

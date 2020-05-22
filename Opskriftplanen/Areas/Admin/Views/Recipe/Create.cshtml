@@ -52,7 +52,7 @@
                 <label asp-for="Recipes.CategoryId" class="col-form-label"></label>
             </div>
             <div class="col-5">
-                <select asp-for="@Model.Recipes.Category" id="CategoryId" asp-items="Model.category.ToSelectListItem(Model.Recipes.CategoryId)" class="form-control"></select>
+                <select asp-for="@Model.Recipes.CategoryId" id="CategoryId" asp-items="Model.category.ToSelectListItem(Model.Recipes.CategoryId)" class="form-control"></select>
             </div>
         </div>
         <a class="btn btn-info" href="javascript:addRow()">Tilføj række</a>
@@ -71,9 +71,9 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><select asp-for="@Model.ingredientCollection.Ingredient" id="CategoryId" asp-items="Model.Ingredient.ToSelectListItem(Model.ingredientCollection.IngredientId)" class="form-control"></select></td>
+                    <td><select asp-for="@Model.ingredientCollection.IngredientId" name="ingredient" id="IngredientId" asp-items="Model.Ingredient.ToSelectListItem(Model.ingredientCollection.IngredientId)" class="form-control"></select></td>
                     <td><input type="number" name="measure" /></td>
-                    <td><select asp-for="@Model.ingredientCollection.MeasurmentUnit" id="CategoryId" asp-items="Model.MeasurmentUnit.ToSelectListItem(Model.ingredientCollection.MeasurmentUnitId)" class="form-control"></select></td>
+                    <td><select asp-for="@Model.ingredientCollection.MeasurmentUnitId" name="measurmenUnit" id="MeasurmentUnitId" asp-items="Model.MeasurmentUnit.ToSelectListItem(Model.ingredientCollection.MeasurmentUnitId)" class="form-control"></select></td>
                 </tr>
             </tbody>
         </table>

@@ -58,20 +58,53 @@
                     <select asp-for="@Model.Recipes.CategoryId" id="CategoryId" asp-items="Model.category.ToSelectListItem(Model.Recipes.CategoryId)" class="form-control"></select>
                 </div>
             </div>
+            <a class="btn btn-info" href="javascript:addRow()">Tilføj række</a>
             <div class="form-group row">
-                
-            </div>
-        </div>
-        <div class="col-3 offset-1">
-            <img src="@Model.Recipes.Image" width="100%" style="border-radius:5px; border: 1px solid #bbb9b9;" />
-        </div>
-        <div class="col-8">
-            <div class="col-8 offset-4">
-                <partial name="_EditAndBackToListButton" model="Model.Recipes.Id" />
-            </div>
-        </div>
+                <div class="col-2">
 
+                </div>
+                <div class="col-5">
+                    <table id="formTable">
+                        <thead>
+                            <tr>
+                                <th><label class="col-form-label">Ingrediens</label></th>
+                                <th><label class="col-form-label">Vægt</label></th>
+                                <th><label class="col-form-label">Måle Enhed</label></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ingredientCollections)
+                            {
+                                <tr>
+                                    <td><select asp-for="@item.IngredientId" name="ingredient" id="IngredientId" asp-items="Model.Ingredient.ToSelectListItem(item.IngredientId)" class="form-control" style="width: 200px;"></select></td>
+                                    <td><input asp-for="@item.Measur" type="number" name="measure" style="width: 80px;" /></td>
+                                    <td><select asp-for="@item.MeasurmentUnitId" name="measurmenUnit" id="MeasurmentUnitId" asp-items="Model.MeasurmentUnit.ToSelectListItem(item.MeasurmentUnitId)" class="form-control" style="width: 100px;"></select></td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-3 offset-1">
+                <img src="@Model.Recipes.Image" width="100%" style="border-radius:5px; border: 1px solid #bbb9b9;" />
+            </div>
+            <div class="col-8">
+                <div class="col-8 offset-4">
+                    <partial name="_EditAndBackToListButton" model="Model.Recipes.Id" />
+                </div>
+            </div>
+        </div>
 
     </div>
 </form>
+@section Scripts{
+    <script>
+        function addRow() {
+            $("#formTable tbody tr:first").clone().find("select").each(function () {
+                $(this).val('');
+            }).end().appendTo("#formTable");
+        }
+    </script>
 
+}

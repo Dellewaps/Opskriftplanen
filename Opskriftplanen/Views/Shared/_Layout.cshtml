@@ -12,7 +12,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Opskriftplanen</a>
+                <a class="navbar-brand" asp-area="Users" asp-controller="Home" asp-action="Index">Opskriftplanen</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -21,17 +21,16 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item dropdown text-white-50">
-                            <a class="mav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Admin Managment
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" asp-action="Index" asp-controller="Category" asp-area="Admin">Kategori</a>
                                 <a class="dropdown-item" asp-action="Index" asp-controller="Ingredient" asp-area="Admin">Ingredienser</a>
-                                @*<a class="dropdown-item" asp-action="Index" asp-controller="Measurment" asp-area="Admin">Vægt</a>*@
                                 <a class="dropdown-item" asp-action="Index" asp-controller="MeasurmentUnit" asp-area="Admin">Måle Enheder</a>
                                 <a class="dropdown-item" asp-action="Index" asp-controller="Recipe" asp-area="Admin">Opskrift</a>
                                 <a class="dropdown-item">Madplan</a>
-                                <a class="dropdown-item">Brugere</a>
+                                <a class="dropdown-item" asp-action="Index" asp-controller="User" asp-area="Admin">Brugere</a>
                             </div>
                         </li>
                         <li class="nav-item">

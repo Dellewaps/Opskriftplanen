@@ -23,7 +23,7 @@ namespace Opskriftplanen.Models
         [ForeignKey("IngredientCollectionsId")]
         public int IngredientCollectionsId { get; set; }
 
-        public virtual ICollection<IngredientCollection> IngredientCollection { get; set; }
+        public virtual IngredientCollection IngredientCollection { get; set; }
 
         [Display(Name = "Category")]
         public int CategoryId { get; set; }

@@ -13,10 +13,14 @@ namespace Opskriftplanen.Models.ViewModels
 
         public IngredientCollection ingredientCollection { get; set; }
 
+        public IEnumerable<IngredientCollection> ingredientCollections { get; set; }
+
         //public int IngrdientId { get; set; }
         public IEnumerable<Ingredient> Ingredient { get; set; }
 
         //public int MeasurmentUnitId { get; set; }
         public IEnumerable<MeasurmentUnit> MeasurmentUnit { get; set; }
+
+        //public virtual Measurment Measurment { get; set; }
     }
 }

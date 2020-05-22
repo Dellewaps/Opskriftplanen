@@ -16,10 +16,8 @@ namespace Opskriftplanen.Models
 
         public Recipes Recipes { get; set; }
 
-        [ForeignKey("MeasurmentId")]
-        public int MeasurmentId { get; set; }
+        public int Measur { get; set; }
 
-        public Measurment Measurment { get; set; }
 
         [ForeignKey("IngredientId")]
         public int IngredientId { get; set; }

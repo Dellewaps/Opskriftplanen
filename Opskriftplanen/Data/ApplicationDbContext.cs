@@ -23,9 +23,9 @@ namespace Opskriftplanen.Data
 
         public DbSet<Ingredient> Ingredient { get; set; }
 
-        public DbSet<Measurment> Measurment { get; set; }
-
         public DbSet<MeasurmentUnit> MeasurmentUnit { get; set; }
+
+        public DbSet<ApplicationUsers> ApplicationUsers { get; set; }
 
     }
 }

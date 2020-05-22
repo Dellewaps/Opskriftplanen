@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Opskriftplanen.Data;
 using Opskriftplanen.Models;
+using Opskriftplanen.Utility;
 
 namespace Opskriftplanen.Areas.Admin.Controllers
 {
+    [Authorize(Roles = SD.Admin)]
     [Area("Admin")]
     public class MeasurmentUnitController : Controller
     {
