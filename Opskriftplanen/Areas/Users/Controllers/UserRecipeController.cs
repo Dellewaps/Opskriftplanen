@@ -2,24 +2,22 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Opskriftplanen.Data;
-using Opskriftplanen.Extensions;
 using Opskriftplanen.Models;
 using Opskriftplanen.Models.ViewModels;
 using Opskriftplanen.Utility;
 
-namespace Opskriftplanen.Areas.Admin.Controllers
+namespace Opskriftplanen.Areas.Users.Controllers
 {
-    [Area("Admin")]
-    public class RecipeController : Controller
+    [Area("Users")]
+    [Authorize]
+    public class UserRecipeController : Controller
     {
         private readonly ApplicationDbContext _db;
 
@@ -28,7 +26,7 @@ namespace Opskriftplanen.Areas.Admin.Controllers
         [BindProperty]
         public RecipeViewModel RecipeVM { get; set; }
 
-        public RecipeController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
+        public UserRecipeController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
         {
             _db = db;
             _webHostEnvironment = webHostEnvironment;
@@ -44,13 +42,18 @@ namespace Opskriftplanen.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var recipe = await _db.Recipe.Include(m => m.Category).ToListAsync();
-            return View(recipe);
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            ApplicationUsers applicationUser = await _db.ApplicationUsers.Where(c => c.Id == claim.Value).FirstOrDefaultAsync();
+
+            var recipes = await _db.Recipe.Include(c => c.Category).Where(c => c.ApplicationUserId == applicationUser.Id).ToListAsync();
+
+            return View(recipes);
         }
 
         public IActionResult Create()
         {
-            
+
             return View(RecipeVM);
         }
 
@@ -63,11 +66,11 @@ namespace Opskriftplanen.Areas.Admin.Controllers
                 return View(RecipeVM);
             }
 
-            
+
             _db.Recipe.Add(RecipeVM.Recipes);
             await _db.SaveChangesAsync();
 
-            
+
             var RecipeFromDb = await _db.Recipe.FindAsync(RecipeVM.Recipes.Id);
 
             for (int i = 0; i < this.Request.Form["ingredient"].Count(); i++)
@@ -85,7 +88,7 @@ namespace Opskriftplanen.Areas.Admin.Controllers
             //For at gemme billede
             string webRootPath = _webHostEnvironment.WebRootPath;
             var files = HttpContext.Request.Form.Files;
-            
+
 
             if (files.Count > 0)
             {
@@ -112,7 +115,7 @@ namespace Opskriftplanen.Areas.Admin.Controllers
 
             RecipeVM.Recipes.ApplicationUserId = claim.Value;
 
-            
+
 
             await _db.SaveChangesAsync();
 
@@ -126,10 +129,12 @@ namespace Opskriftplanen.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            RecipeVM.Recipes = await _db.Recipe.Include(m => m.Category).SingleOrDefaultAsync(m => m.Id == id);
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            RecipeVM.ingredientCollections = _db.IngredientCollection.Where(m => m.RecipesId == id).Include(m => m.Ingredient).Include(m => m.MeasurmentUnit);
-            
+            RecipeVM.Recipes = await _db.Recipe.Include(m => m.Category).SingleOrDefaultAsync(m => m.Id == id && m.ApplicationUserId == claim.Value);
+            RecipeVM.ingredientCollections = _db.IngredientCollection.Where(m => m.RecipesId == id && m.Recipes.ApplicationUserId == claim.Value).Include(m => m.Ingredient).Include(m => m.MeasurmentUnit);
+
 
             if (RecipeVM.Recipes == null)
             {
@@ -171,7 +176,7 @@ namespace Opskriftplanen.Areas.Admin.Controllers
             string webRootPath = _webHostEnvironment.WebRootPath;
             var files = HttpContext.Request.Form.Files;
 
-            
+
             if (files.Count > 0)
             {
                 //Nyt billede er blevet uploadet 
@@ -219,8 +224,10 @@ namespace Opskriftplanen.Areas.Admin.Controllers
             {
                 NotFound();
             }
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            RecipeVM.Recipes = await _db.Recipe.Include(g => g.Category).SingleOrDefaultAsync(m => m.Id == id);
+            RecipeVM.Recipes = await _db.Recipe.Include(g => g.Category).SingleOrDefaultAsync(m => m.Id == id && m.ApplicationUserId == claim.Value);
             RecipeVM.ingredientCollections = _db.IngredientCollection.Where(m => m.RecipesId == id).Include(m => m.Ingredient).Include(m => m.MeasurmentUnit);
 
             if (RecipeVM.Recipes == null)
@@ -238,7 +245,10 @@ namespace Opskriftplanen.Areas.Admin.Controllers
                 NotFound();
             }
 
-            RecipeVM.Recipes = await _db.Recipe.Include(g => g.Category).SingleOrDefaultAsync(m => m.Id == id);
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            RecipeVM.Recipes = await _db.Recipe.Include(g => g.Category).SingleOrDefaultAsync(m => m.Id == id && m.ApplicationUserId == claim.Value);
             RecipeVM.ingredientCollections = _db.IngredientCollection.Where(m => m.RecipesId == id).Include(m => m.Ingredient).Include(m => m.MeasurmentUnit);
 
             if (RecipeVM.Recipes == null)
@@ -257,7 +267,7 @@ namespace Opskriftplanen.Areas.Admin.Controllers
 
             Recipes recipes = await _db.Recipe.FindAsync(id);
             var ingredientCollection = _db.IngredientCollection.Where(m => m.RecipesId == id).ToList();
-            
+
 
             if (recipes != null)
             {
@@ -268,7 +278,7 @@ namespace Opskriftplanen.Areas.Admin.Controllers
                     System.IO.File.Delete(imagePath);
                 }
 
-                foreach(var item in ingredientCollection)
+                foreach (var item in ingredientCollection)
                 {
                     _db.IngredientCollection.Remove(item);
                 }

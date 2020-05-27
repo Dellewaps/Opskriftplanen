@@ -31,7 +31,11 @@ namespace Opskriftplanen.Models
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
 
-        
+        public string ApplicationUserId { get; set; }
+
+        [NotMapped]
+        [ForeignKey("ApplicationUserId")]
+        public virtual ApplicationUsers ApplicationUser { get; set; }
 
     }
 }

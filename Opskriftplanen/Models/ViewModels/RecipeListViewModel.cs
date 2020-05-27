@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Opskriftplanen.Models.ViewModels
 {
-    public class RecipeViewModel
+    public class RecipeListViewModel
     {
+        public RecipeList RecipeList { get; set; }
         public Recipes Recipes { get; set; }
 
         public IEnumerable<Category> category { get; set; }
@@ -19,7 +21,7 @@ namespace Opskriftplanen.Models.ViewModels
 
         public IEnumerable<MeasurmentUnit> MeasurmentUnit { get; set; }
 
-        public ApplicationUsers ApplicationUsers { get; set; }
+        public int ResipesId { get; set; }
 
         
     }

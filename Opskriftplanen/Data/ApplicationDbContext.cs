@@ -27,5 +27,10 @@ namespace Opskriftplanen.Data
 
         public DbSet<ApplicationUsers> ApplicationUsers { get; set; }
 
+        public DbSet<PlanHeader> PlanHeader { get; set; }
+
+        public DbSet<RecipeList> RecipeList { get; set; }
+
+        public DbSet<WeekPlan> WeekPlan { get; set; }
     }
 }

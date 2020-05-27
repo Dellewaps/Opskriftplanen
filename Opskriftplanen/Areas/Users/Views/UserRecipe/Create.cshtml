@@ -1,0 +1,101 @@
+﻿@model Opskriftplanen.Models.ViewModels.RecipeViewModel
+@using Opskriftplanen.Extensions
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2 class="text-info">Opret Film</h2>
+<br />
+
+<form method="post" enctype="multipart/form-data">
+    <div class="bordoer backgroundWhite">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Recipes.Name" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="Recipes.Name" class="form-control" />
+            </div>
+            <span asp-validation-for="Recipes.Name" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Recipes.Description" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                @Html.TextAreaFor(m => m.Recipes.Description)
+            </div>
+            <span asp-validation-for="Recipes.Description" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Recipes.PersonCount" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="Recipes.PersonCount" class="form-control" />
+            </div>
+            <span asp-validation-for="Recipes.PersonCount" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Recipes.Image" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input type="file" name="files" multiple class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Recipes.CategoryId" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <select asp-for="@Model.Recipes.CategoryId" id="CategoryId" asp-items="Model.category.ToSelectListItem(Model.Recipes.CategoryId)" class="form-control"></select>
+            </div>
+        </div>
+        <a class="btn btn-info" href="javascript:addRow()">Tilføj række</a>
+        <div class="form-group row">
+            <div class="col-2">
+
+            </div>
+            <div class="col-5">
+                <table id="formTable">
+                    <thead>
+                        <tr>
+                            <th><label class="col-form-label">Ingrediens</label></th>
+                            <th><label class="col-form-label">Vægt</label></th>
+                            <th><label class="col-form-label">Måle Enhed</label></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><select asp-for="@Model.ingredientCollection.IngredientId" name="ingredient" id="IngredientId" asp-items="Model.Ingredient.ToSelectListItem(Model.ingredientCollection.IngredientId)" class="form-control"></select></td>
+                            <td><input type="number" name="measure" /></td>
+                            <td><select asp-for="@Model.ingredientCollection.MeasurmentUnitId" name="measurmenUnit" id="MeasurmentUnitId" asp-items="Model.MeasurmentUnit.ToSelectListItem(Model.ingredientCollection.MeasurmentUnitId)" class="form-control"></select></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="form-group row">
+            <div class="col-5 offset-2">
+                <partial name="_CreateAndBackToListButton" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+        function addRow() {
+            $("#formTable tbody tr:first").clone().find("select").each(function () {
+                $(this).val('');
+            }).end().appendTo("#formTable");
+        }
+    </script>
+
+}

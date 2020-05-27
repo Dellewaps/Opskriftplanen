@@ -1,0 +1,110 @@
+﻿@model Opskriftplanen.Models.RecipeList
+@using Opskriftplanen.Utility
+@using Opskriftplanen.Extensions
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2 class="text-info">Opskrift Detaljer</h2>
+<br />
+
+<form method="post">
+    <div class="bordoer backgroundWhite row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="col-12 pb-4 d-md-none">
+            <img src="@Model.Recipes.Image" width="100%" style="border-radius:5px; border: 1px solid #bbb9b9;" />
+        </div>
+        <div class="col-md-8">
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label asp-for="Recipes.Name" class="text-info font-weight-bold"></label>
+                </div>
+                <div class="col-md-8">
+                    <input asp-for="Recipes.Name" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label asp-for="Recipes.Description" class="text-info font-weight-bold"></label>
+                </div>
+                <div class="col-md-8">
+                    <div class="border p-2">
+                        @Html.Raw(Model.Recipes.Description)
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label asp-for="Recipes.PersonCount" class="text-info font-weight-bold"></label>
+                </div>
+                <div class="col-md-8">
+                    <input asp-for="Recipes.PersonCount" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label asp-for="Recipes.CategoryId" class="text-info font-weight-bold"></label>
+                </div>
+                <div class="col-md-8">
+                    <input asp-for="Recipes.Category.Name" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-4">
+
+                </div>
+                <div class="col-md-8">
+                    <table id="formTable">
+                        <thead>
+                            <tr>
+                                <th><label class="col-form-label">Ingrediens</label></th>
+                                <th><label class="col-form-label">Vægt</label></th>
+                                <th><label class="col-form-label">Måle Enhed</label></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ingredientCollections)
+                            {
+                            <tr>
+                                <td><input disabled asp-for="@item.Ingredient.Name" name="ingredient" id="IngredientId" asp-items="Model.Ingredient.ToSelectListItem(item.IngredientId)" class="form-control" style="width: 200px;"></input></td>
+                                <td><input disabled asp-for="@item.Measur" type="number" name="measure" style="width: 80px;" /></td>
+                                <td><input disabled asp-for="@item.MeasurmentUnit.Name" name="measurmenUnit" id="MeasurmentUnitId" asp-items="Model.MeasurmentUnit.ToSelectListItem(item.MeasurmentUnitId)" class="form-control" style="width: 100px;"></input></td>
+
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-4">
+
+                </div>
+                <div class="col-md-4">
+                    <a asp-action="Index" class="btn btn-secondary form-control">Tilbage til listen</a>
+                </div>
+                <div class="col-md-4">
+                    @if (User.IsInRole(SD.Admin))
+                    {
+                        <button type="submit" value="Add to List" class="btn btn-primary form-control">Læg til listen</button>
+                    }
+                    @if (User.IsInRole(SD.EndUser))
+                    {
+                        <button type="submit" value="Add to List" class="btn btn-primary form-control">Læg til listen</button>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-3 offset-1 d-none d-md-block">
+            <img src="@Model.Recipes.Image" width="100%" style="border-radius:5px; border: 1px solid #bbb9b9;" />
+        </div>
+
+
+
+    </div>
+    <input  asp-for="ResipesId" hidden />
+</form>
+

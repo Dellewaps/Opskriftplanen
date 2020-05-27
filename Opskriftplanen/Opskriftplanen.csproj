@@ -12,6 +12,18 @@
     <Compile Remove="Data\Migrations\20200519165943_ChangeToRecipeModel.Designer.cs" />
     <Compile Remove="Data\Migrations\20200519213519_ChangeToRecipeModel.cs" />
     <Compile Remove="Data\Migrations\20200519213519_ChangeToRecipeModel.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200523211846_newChanges.cs" />
+    <Compile Remove="Data\Migrations\20200523211846_newChanges.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200523212407_newChanges.cs" />
+    <Compile Remove="Data\Migrations\20200523212407_newChanges.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200523213317_newChangessec.cs" />
+    <Compile Remove="Data\Migrations\20200523213317_newChangessec.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200523215448_newChangestry.cs" />
+    <Compile Remove="Data\Migrations\20200523215448_newChangestry.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200523215923_newChangessec.cs" />
+    <Compile Remove="Data\Migrations\20200523215923_newChangessec.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200523220347_newChangessec.cs" />
+    <Compile Remove="Data\Migrations\20200523220347_newChangessec.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

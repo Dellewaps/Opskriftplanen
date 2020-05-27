@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Opskriftplanen.Data;
 
 namespace Opskriftplanen.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200524181516_MadeChangesToSomeModels")]
+    partial class MadeChangesToSomeModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,12 +234,7 @@ namespace Opskriftplanen.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RecipeListId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RecipeListId");
 
                     b.ToTable("Category");
                 });
@@ -252,12 +249,7 @@ namespace Opskriftplanen.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RecipeListId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RecipeListId");
 
                     b.ToTable("Ingredient");
                 });
@@ -308,12 +300,7 @@ namespace Opskriftplanen.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RecipeListId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RecipeListId");
 
                     b.ToTable("MeasurmentUnit");
                 });
@@ -352,12 +339,7 @@ namespace Opskriftplanen.Data.Migrations
                     b.Property<int>("ResipesId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ingredientCollectionId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ingredientCollectionId");
 
                     b.ToTable("RecipeList");
                 });
@@ -391,14 +373,9 @@ namespace Opskriftplanen.Data.Migrations
                     b.Property<int>("PersonCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RecipeListId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("RecipeListId");
 
                     b.ToTable("Recipe");
                 });
@@ -505,20 +482,6 @@ namespace Opskriftplanen.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Opskriftplanen.Models.Category", b =>
-                {
-                    b.HasOne("Opskriftplanen.Models.RecipeList", null)
-                        .WithMany("category")
-                        .HasForeignKey("RecipeListId");
-                });
-
-            modelBuilder.Entity("Opskriftplanen.Models.Ingredient", b =>
-                {
-                    b.HasOne("Opskriftplanen.Models.RecipeList", null)
-                        .WithMany("Ingredient")
-                        .HasForeignKey("RecipeListId");
-                });
-
             modelBuilder.Entity("Opskriftplanen.Models.IngredientCollection", b =>
                 {
                     b.HasOne("Opskriftplanen.Models.Ingredient", "Ingredient")
@@ -544,13 +507,6 @@ namespace Opskriftplanen.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Opskriftplanen.Models.MeasurmentUnit", b =>
-                {
-                    b.HasOne("Opskriftplanen.Models.RecipeList", null)
-                        .WithMany("MeasurmentUnit")
-                        .HasForeignKey("RecipeListId");
-                });
-
             modelBuilder.Entity("Opskriftplanen.Models.PlanHeader", b =>
                 {
                     b.HasOne("Opskriftplanen.Models.ApplicationUsers", "ApplicationUser")
@@ -560,13 +516,6 @@ namespace Opskriftplanen.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Opskriftplanen.Models.RecipeList", b =>
-                {
-                    b.HasOne("Opskriftplanen.Models.IngredientCollection", "ingredientCollection")
-                        .WithMany()
-                        .HasForeignKey("ingredientCollectionId");
-                });
-
             modelBuilder.Entity("Opskriftplanen.Models.Recipes", b =>
                 {
                     b.HasOne("Opskriftplanen.Models.Category", "Category")
@@ -574,10 +523,6 @@ namespace Opskriftplanen.Data.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Opskriftplanen.Models.RecipeList", null)
-                        .WithMany("Recipe")
-                        .HasForeignKey("RecipeListId");
                 });
 
             modelBuilder.Entity("Opskriftplanen.Models.WeekPlan", b =>

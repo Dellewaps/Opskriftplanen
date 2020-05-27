@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Opskriftplanen.Data;
 
 namespace Opskriftplanen.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200525104442_changedRecipeListModel")]
+    partial class changedRecipeListModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -391,14 +393,9 @@ namespace Opskriftplanen.Data.Migrations
                     b.Property<int>("PersonCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RecipeListId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("RecipeListId");
 
                     b.ToTable("Recipe");
                 });
@@ -574,10 +571,6 @@ namespace Opskriftplanen.Data.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Opskriftplanen.Models.RecipeList", null)
-                        .WithMany("Recipe")
-                        .HasForeignKey("RecipeListId");
                 });
 
             modelBuilder.Entity("Opskriftplanen.Models.WeekPlan", b =>

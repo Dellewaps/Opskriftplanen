@@ -1,0 +1,60 @@
+﻿@model Opskriftplanen.Models.ViewModels.PlanDetailsList
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <form method="post">
+        @if (Model.RecipeList.Count > 0)
+        {
+            <br />
+            <input id="userId" asp-for="@Model.RecipeList[0].ApplicationUserId" hidden />
+            <div class="backgroundWhiteBorder">
+                <div class="container">
+                    <div class="card">
+                        <div class="card-header bg-dark text-light ml-0 row container">
+                            <div class="col-6">
+                                <i class="fade fa-shooping-cart"></i> &nbsp;
+                                Kurv
+                            </div>
+                            <div class="col-6 text-right">
+                                <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-outline-info btn-sm">Tilbage til opskrifter</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            @foreach (var item in Model.RecipeList)
+                            {
+                                <div class="row">
+                                    <div class="d-none d-lg-block col-lg-2 text-center py-2">
+                                        <img src="@item.Recipes.Image" class="rounded" width="120" height="160" />
+                                    </div>
+                                    <div class="col-12 text-sm-center col-lg-5 text-lg-left row">
+                                        <h4><strong>@item.Recipes.Name</strong></h4>
+                                        <h4><small>@item.Recipes.Description</small></h4>
+                                    </div>
+                                    <div class="col-12 text-sm-center col-lg-5 text-lg-right row">
+                                        <div class="col-10 col-sm-8 col-lg-10"></div>
+                                        <div class="col-2 col-sm-4 col-lg-2 text-right">
+                                            <button type="submit" class="btn btn-outline-danger" asp-action="remove" asp-route-cartId="@item.Id">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                            }
+                        </div>
+                        <div class="card-footer">
+                            <div class="col-12 col-lg-4 offset-lg-8 col-md-6 offset-md-6">
+                                <a asp-action="Weekplan" asp-area="Users" asp-controller="Plan" class="btn btn-success form-control">Oversigt</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="backgroundWhiteBorder">Der er ikke lagt noget til listen...</div>
+        }
+    </form>

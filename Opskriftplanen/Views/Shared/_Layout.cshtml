@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Opskriftplanen.Utility
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,6 +9,7 @@
     <title>@ViewData["Title"] - Opskriftplanen</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/jquery-ui.css" />
     <script src="https://kit.fontawesome.com/23be5db119.js" crossorigin="anonymous"></script>
 </head>
 <body class="search-background">
@@ -20,25 +24,50 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
+                        @if (User.IsInRole(SD.Admin))
+                        {
+                            <li class="nav-item dropdown text-white-50">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Admin Managment
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="Category" asp-area="Admin">Kategori</a>
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="Ingredient" asp-area="Admin">Ingredienser</a>
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="MeasurmentUnit" asp-area="Admin">Måle Enheder</a>
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="Recipe" asp-area="Admin">Opskrift</a>
+                                    <a class="dropdown-item">Madplan</a>
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="User" asp-area="Admin">Brugere</a>
+                                </div>
+                            </li>
+                        }
                         <li class="nav-item dropdown text-white-50">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Admin Managment
+                                Menu
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" asp-action="Index" asp-controller="Category" asp-area="Admin">Kategori</a>
-                                <a class="dropdown-item" asp-action="Index" asp-controller="Ingredient" asp-area="Admin">Ingredienser</a>
-                                <a class="dropdown-item" asp-action="Index" asp-controller="MeasurmentUnit" asp-area="Admin">Måle Enheder</a>
-                                <a class="dropdown-item" asp-action="Index" asp-controller="Recipe" asp-area="Admin">Opskrift</a>
+                                <a class="dropdown-item" asp-action="Index" asp-controller="UserRecipe" asp-area="Users">Opskrift</a>
                                 <a class="dropdown-item">Madplan</a>
-                                <a class="dropdown-item" asp-action="Index" asp-controller="User" asp-area="Admin">Brugere</a>
                             </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        @if (HttpContextAccessor.HttpContext.Session.GetInt32(@SD.ssRecipeListCount) != null)
+                        {
+                            <li style="color: white;">
+                                <a asp-area="Users" asp-controller="Plan" asp-action="Index" class="nav-link">
+                                    @{
+                                        var count = HttpContextAccessor.HttpContext.Session.GetInt32(@SD.ssRecipeListCount);
+                                    }
+                                    <i class="far fa-list-alt"></i> &nbsp; (@count)
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li style="color:white">
+                                <a href="#" class="nav-link">
+                                    <i class="fas fa-compact-disc"></i> &nbsp; (0)
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -57,6 +86,7 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/jquery-ui.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>

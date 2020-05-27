@@ -1,5 +1,4 @@
 ﻿@model Opskriftplanen.Models.ViewModels.RecipeViewModel
-@using Opskriftplanen.Extensions
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -59,12 +58,12 @@
                         <tbody>
                             @foreach (var item in Model.ingredientCollections)
                             {
-                            <tr>
-                                <td><select disabled asp-for="@item.IngredientId" name="ingredient" id="IngredientId" asp-items="Model.Ingredient.ToSelectListItem(item.IngredientId)" class="form-control" style="width: 200px;"></select></td>
-                                <td><input disabled asp-for="@item.Measur" type="number" name="measure" style="width: 80px;" /></td>
-                                <td><select disabled asp-for="@item.MeasurmentUnitId" name="measurmenUnit" id="MeasurmentUnitId" asp-items="Model.MeasurmentUnit.ToSelectListItem(item.MeasurmentUnitId)" class="form-control" style="width: 100px;"></select></td>
+                                <tr>
+                                    <td><select asp-for="@item.Ingredient.Name" id="IngredientId" class="form-control" style="width: 200px;"></select></td>
+                                    <td><input asp-for="@item.Measur" style="width: 80px;" /></td>
+                                    <td><select asp-for="@item.MeasurmentUnit.Name" class="form-control" style="width: 100px;"></select></td>
 
-                            </tr>
+                                </tr>
                             }
                         </tbody>
                     </table>

@@ -1,8 +1,50 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model Opskriftplanen.Models.ViewModels.IndexViewModel
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+
+<br />
+
+<div class="backgroundWhite container">
+
+    <ul id="menu-filters" class="menu-filter-list list-inline text-center">
+        <li class="filter active btn btn-secondary ml-1 mr-1" data-filter=".opskrift-list">Vis alle</li>
+        @foreach (var item in Model.Category)
+        {
+            <li class="filter ml-1 mr-1" data-filter=".@item.Name.Replace(" ",string.Empty)">@item.Name</li>
+        }
+    </ul>
+
+    @foreach (var cate in Model.Category)
+    {
+        <div class="row" id="menu-wrapper">
+            <partial name="_ThumbnailAreaPartial" model="@Model.Recipes.Where(u => u.Category.Name.Equals(cate.Name))" />
+        </div>
+    }
 </div>
+
+@section Scripts{
+    <script src="http://code.jquery.com/jquery-3.5.1.js" 
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" 
+            crossorigin="anonymous"></script>
+
+    <script>
+    var posts = $('.post');
+
+    (function ($) {
+        $("#menu-filters li").click(function () {
+            $("#menu-filters li").removeClass('active btn btn-secondary');
+            $(this).addClass('active btn btn-secondary');
+
+            var selectedFilter = $(this).data("filter");
+
+            $(".opskrift-list").fadeOut();
+
+            setTimeout(function () {
+                $(selectedFilter).slideDown();
+            }, 300);
+        });
+    })(jQuery);
+
+    </script>
+
+}
