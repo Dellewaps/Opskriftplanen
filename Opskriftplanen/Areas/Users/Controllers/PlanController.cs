@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
 
 namespace Opskriftplanen.Areas.Users.Controllers
 {
@@ -87,13 +88,75 @@ namespace Opskriftplanen.Areas.Users.Controllers
                 
             }
 
-            
-            //DetailsList.Recipes = _db.RecipeList.Where(r => r.ResipesId == r.Recipes.Id).Include(i => i.Recipes);
-            //DetailsList.Recipes = list.Include(i => i.Recipes).Where(r => r.ResipesId == r.Recipes.Id).Select(r => new Recipes {Id = r.ResipesId, Name = r.Recipes.Name }).AsEnumerable<Recipes>();
             DetailsList.PlanHeader.Name = applicationUser.Name;
             
 
             return View(DetailsList);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Weekplan")]
+        public async Task<IActionResult> WeekplanPost()
+        {
+            
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            DetailsList.RecipeList = await _db.RecipeList.Where(u => u.ApplicationUserId == claim.Value).ToListAsync();
+
+            DetailsList.PlanHeader.UserId = claim.Value;
+
+            List<WeekDetails> weekDetailsList = new List<WeekDetails>();
+            _db.PlanHeader.Add(DetailsList.PlanHeader);
+            await _db.SaveChangesAsync();
+
+            WeekPlan week = new WeekPlan()
+            {
+                ApplicationUserId = claim.Value,
+                Week = DetailsList.WeekPlan.Week,
+                Monday = Convert.ToInt32(HttpContext.Request.Form["monday"]),
+                Tuesday = Convert.ToInt32(HttpContext.Request.Form["tuesday"]),
+                Wednesday = Convert.ToInt32(HttpContext.Request.Form["wednesday"]),
+                Thursday = Convert.ToInt32(HttpContext.Request.Form["thursday"]),
+                Friday = Convert.ToInt32(HttpContext.Request.Form["friday"]),
+                Saturday = Convert.ToInt32(HttpContext.Request.Form["saturday"]),
+                Sunday = Convert.ToInt32(HttpContext.Request.Form["sunday"])
+                
+            };
+            _db.WeekPlan.Add(week);
+            await _db.SaveChangesAsync();
+            foreach (var item in DetailsList.RecipeList)
+            {
+                item.Recipes = await _db.Recipe.FirstOrDefaultAsync(m => m.Id == item.ResipesId);
+                WeekDetails weekDetails = new WeekDetails()
+                {
+                    RecipesId = item.ResipesId,
+                    PlanId = DetailsList.PlanHeader.Id,
+                    Name = item.Recipes.Name,
+                    WeekPlanId = week.Id,
+                };
+                _db.WeekDetails.Add(weekDetails);
+            }
+            _db.RecipeList.RemoveRange(DetailsList.RecipeList);
+            HttpContext.Session.SetInt32(SD.ssRecipeListCount, 0);
+            await _db.SaveChangesAsync();
+            
+            return RedirectToAction("Print", "UserWeekPlan", new { id = DetailsList.PlanHeader.Id });
+        }
+
+
+        public async Task<IActionResult> Remove (int listId)
+        {
+            var list = await _db.RecipeList.FirstOrDefaultAsync(c => c.Id == listId);
+
+            _db.RecipeList.Remove(list);
+            await _db.SaveChangesAsync();
+
+            var cnt = _db.RecipeList.Where(u => u.ApplicationUserId == list.ApplicationUserId).ToList().Count();
+            HttpContext.Session.SetInt32(SD.ssRecipeListCount, cnt);
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

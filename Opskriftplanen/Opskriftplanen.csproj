@@ -24,6 +24,12 @@
     <Compile Remove="Data\Migrations\20200523215923_newChangessec.Designer.cs" />
     <Compile Remove="Data\Migrations\20200523220347_newChangessec.cs" />
     <Compile Remove="Data\Migrations\20200523220347_newChangessec.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200531103118_addedVirtuelRecipesToWeek.cs" />
+    <Compile Remove="Data\Migrations\20200531103118_addedVirtuelRecipesToWeek.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200531103229_addedVirtuelRecipesToWeek.cs" />
+    <Compile Remove="Data\Migrations\20200531103229_addedVirtuelRecipesToWeek.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200531164837_addedIColRecipesToWeek.cs" />
+    <Compile Remove="Data\Migrations\20200531164837_addedIColRecipesToWeek.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Opskriftplanen.Data;
 
 namespace Opskriftplanen.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200529142535_removedUnusedProperty")]
+    partial class removedUnusedProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -426,8 +428,6 @@ namespace Opskriftplanen.Data.Migrations
 
                     b.HasIndex("PlanId");
 
-                    b.HasIndex("RecipesId");
-
                     b.HasIndex("WeekPlanId");
 
                     b.ToTable("WeekDetails");
@@ -440,13 +440,13 @@ namespace Opskriftplanen.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("Friday")
                         .HasColumnType("int");
 
                     b.Property<int>("Monday")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RecipesId")
                         .HasColumnType("int");
 
                     b.Property<int>("Saturday")
@@ -469,7 +469,7 @@ namespace Opskriftplanen.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("RecipesId");
 
                     b.ToTable("WeekPlan");
                 });
@@ -620,7 +620,7 @@ namespace Opskriftplanen.Data.Migrations
 
                     b.HasOne("Opskriftplanen.Models.Recipes", "Recipes")
                         .WithMany()
-                        .HasForeignKey("RecipesId")
+                        .HasForeignKey("PlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -633,9 +633,9 @@ namespace Opskriftplanen.Data.Migrations
 
             modelBuilder.Entity("Opskriftplanen.Models.WeekPlan", b =>
                 {
-                    b.HasOne("Opskriftplanen.Models.ApplicationUsers", "ApplicationUser")
+                    b.HasOne("Opskriftplanen.Models.Recipes", "Recipes")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("RecipesId");
                 });
 #pragma warning restore 612, 618
         }

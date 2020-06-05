@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Opskriftplanen.Data;
 
 namespace Opskriftplanen.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200531125946_addedVirtuelRecipesToWeek")]
+    partial class addedVirtuelRecipesToWeek
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -449,6 +451,9 @@ namespace Opskriftplanen.Data.Migrations
                     b.Property<int>("Monday")
                         .HasColumnType("int");
 
+                    b.Property<int?>("RecipesId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Saturday")
                         .HasColumnType("int");
 
@@ -470,6 +475,8 @@ namespace Opskriftplanen.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("RecipesId");
 
                     b.ToTable("WeekPlan");
                 });
@@ -636,6 +643,10 @@ namespace Opskriftplanen.Data.Migrations
                     b.HasOne("Opskriftplanen.Models.ApplicationUsers", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("Opskriftplanen.Models.Recipes", "Recipes")
+                        .WithMany()
+                        .HasForeignKey("RecipesId");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,13 +8,14 @@ using Opskriftplanen.Models;
 
 namespace Opskriftplanen.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext 
     {
+        
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
-
+        
         public DbSet<Category> Category { get; set; }
 
         public DbSet<Recipes> Recipe { get; set; }
@@ -32,5 +33,7 @@ namespace Opskriftplanen.Data
         public DbSet<RecipeList> RecipeList { get; set; }
 
         public DbSet<WeekPlan> WeekPlan { get; set; }
+
+        public DbSet<WeekDetails> WeekDetails { get; set; }
     }
 }

@@ -116,3 +116,11 @@ body {
         background-color: #545b62;
         color: #fff;
     }
+
+#weekdayResipeId option {
+    color: black;
+}
+
+.empty {
+    color: gray;
+}

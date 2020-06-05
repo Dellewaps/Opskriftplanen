@@ -1,0 +1,64 @@
+﻿@model Opskriftplanen.Models.ViewModels.WeekIndexViewModel
+@using Opskriftplanen.Extensions
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2 class="text-info">Rediger Ugeplan</h2>
+<br />
+
+<form method="post" enctype="multipart/form-data">
+    <div class="bordoer backgroundWhite row">
+        <input type="hidden" asp-for="@Model.WeekPlan.Id" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="col-8">
+            
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="@Model.WeekPlan.Week" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input type="text" id="weekpicker" asp-for="@Model.WeekPlan.Week" class="form-control" />
+                </div>
+                
+            </div>
+           
+            <div class="col-8">
+                <div class="col-8 offset-4">
+                    <partial name="_EditAndBackToListButton" model="Model.WeekPlan.Id" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+@section Scripts{
+    <script>
+
+        $(function () {
+            $("#weekpicker").datepicker({
+                showAnim: 'slideDown',
+                showButtonPanel: true,
+                numberOfMonths: 2,
+                showWeek: true,
+                weekHeader: "W"
+            }).datepicker("setDate", new Date());
+
+
+            $(function () {
+                $("#weekpicker").datepicker("option", "onSelect",
+                    function (value, date) {
+                        var week = $.datepicker.iso8601Week(
+                            new Date(date.selectedYear,
+                                date.selectedMonth,
+                                date.selectedDay));
+                        $(this).val(date.selectedYear + '-week-' + (week < 10 ? '0' : '') + week);
+                    }
+                );
+            });
+        });
+    </script>
+}

@@ -76,9 +76,9 @@
                             @foreach (var item in Model.ingredientCollections)
                             {
                                 <tr>
-                                    <td><select asp-for="@item.IngredientId" name="ingredient" id="IngredientId" asp-items="Model.Ingredient.ToSelectListItem(item.IngredientId)" class="form-control" style="width: 200px;"></select></td>
+                                    <td><select asp-for="@item.IngredientId" name="ingredient" id="IngredientId" asp-items="Model.Ingredient.ToSelectListItem(item.IngredientId)" placeholder="Vælg Ingrediens" class="form-control" style="width: 200px;"></select></td>
                                     <td><input asp-for="@item.Measur" type="number" name="measure" style="width: 80px;" /></td>
-                                    <td><select asp-for="@item.MeasurmentUnitId" name="measurmenUnit" id="MeasurmentUnitId" asp-items="Model.MeasurmentUnit.ToSelectListItem(item.MeasurmentUnitId)" class="form-control" style="width: 100px;"></select></td>
+                                    <td><select asp-for="@item.MeasurmentUnitId" name="measurmenUnit" id="MeasurmentUnitId" asp-items="Model.MeasurmentUnit.ToSelectListItem(item.MeasurmentUnitId)" placeholder="Måle enhed" class="form-control" style="width: 100px;"></select></td>
 
                                 </tr>
                             }

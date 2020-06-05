@@ -16,10 +16,10 @@
                     <div class="card-header bg-dark text-light ml-0 row container">
                         <div class="col-6">
                             <i class="fade fa-shooping-cart"></i> &nbsp;
-                            Leje Oversigt
+                            Ugeplans Oversigt
                         </div>
                         <div class="col-6 text-right">
-                            <a asp-area="Customer" asp-controller="Plan" asp-action="Index" class="btn btn-outline-info btn-sm">Tilbage til List</a>
+                            <a asp-area="Users" asp-controller="Plan" asp-action="Index" class="btn btn-outline-info btn-sm">Tilbage til List</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -41,10 +41,10 @@
                                     </div>
                                     <div class="row my-1">
                                         <div class="col-3">
-                                            <label>Uge</label>
+                                            <label for="week">Vælg en uge</label>
                                         </div>
                                         <div class="col-9">
-                                            <input asp-for="@Model.WeekPlan.Week" id="txtName" type="text" class="form-control" />
+                                            <input type="text" id="weekpicker" asp-for="@Model.WeekPlan.Week" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="row my-1">
@@ -54,7 +54,7 @@
                                         <div class="col-9">
                                             @for (var i = 0; i < Model.RecipeList.Count(); i++)
                                             {
-                                                <select asp-for="@Model.RecipeList[i].ResipesId" id="ResipeId" asp-items="@Model.Recipe.ToSelectListItem(Model.RecipeList[i].ResipesId)" class="form-control"></select>
+                                                <select asp-for="@Model.RecipeList[i].ResipesId" name="monday" id="weekdayResipeId" asp-items="@Model.Recipe.ToSelectListItem(Model.RecipeList[i].ResipesId)"  class="form-control"><option  value="">Vælg Opskrift</option></select>
                                             }
                                         </div>
                                     </div>
@@ -65,7 +65,7 @@
                                         <div class="col-9">
                                             @for (var i = 0; i < Model.RecipeList.Count(); i++)
                                             {
-                                                <select asp-for="@Model.RecipeList[i].ResipesId" id="ResipeId" asp-items="@Model.Recipe.ToSelectListItem(Model.RecipeList[i].ResipesId)" class="form-control"></select>
+                                                <select asp-for="@Model.RecipeList[i].ResipesId" name="tuesday" id="weekdayResipeId" asp-items="@Model.Recipe.ToSelectListItem(Model.RecipeList[i].ResipesId)" placeholder="Vælg opskrift" class="form-control"><option value="0">vælg Opskrift</option></select>
                                             }
                                         </div>
                                     </div>
@@ -76,7 +76,7 @@
                                         <div class="col-9">
                                             @for (var i = 0; i < Model.RecipeList.Count(); i++)
                                             {
-                                                <select asp-for="@Model.RecipeList[i].ResipesId" id="ResipeId" asp-items="@Model.Recipe.ToSelectListItem(Model.RecipeList[i].ResipesId)" class="form-control"></select>
+                                                <select asp-for="@Model.RecipeList[i].ResipesId" name="wednesday" id="weekdayResipeId" asp-items="@Model.Recipe.ToSelectListItem(Model.RecipeList[i].ResipesId)" placeholder="Vælg opskrift" class="form-control"><option value="0" >Vælg Opskrift</option></select>
                                             }
                                         </div>
                                     </div>
@@ -87,7 +87,7 @@
                                         <div class="col-9">
                                             @for (var i = 0; i < Model.RecipeList.Count(); i++)
                                             {
-                                                <select asp-for="@Model.RecipeList[i].ResipesId" id="ResipeId" asp-items="@Model.Recipe.ToSelectListItem(Model.RecipeList[i].ResipesId)" class="form-control"></select>
+                                                <select asp-for="@Model.RecipeList[i].ResipesId" name="thursday" id="weekdayResipeId" asp-items="@Model.Recipe.ToSelectListItem(Model.RecipeList[i].ResipesId)" placeholder="Vælg opskrift" class="form-control"><option value="0">Vælg Opskrift</option></select>
                                             }
                                         </div>
                                     </div>
@@ -98,7 +98,7 @@
                                         <div class="col-9">
                                             @for (var i = 0; i < Model.RecipeList.Count(); i++)
                                             {
-                                                <select asp-for="@Model.RecipeList[i].ResipesId" id="ResipeId" asp-items="@Model.Recipe.ToSelectListItem(Model.RecipeList[i].ResipesId)" class="form-control"></select>
+                                                <select asp-for="@Model.RecipeList[i].ResipesId" name="friday" id="weekdayResipeId" asp-items="@Model.Recipe.ToSelectListItem(Model.RecipeList[i].ResipesId)" placeholder="Vælg opskrift" class="form-control"><option value="0">Vælg Opskrift</option></select>
                                             }
                                         </div>
                                     </div>
@@ -109,7 +109,7 @@
                                         <div class="col-9">
                                             @for (var i = 0; i < Model.RecipeList.Count(); i++)
                                             {
-                                                <select asp-for="@Model.RecipeList[i].ResipesId" id="ResipeId" asp-items="@Model.Recipe.ToSelectListItem(Model.RecipeList[i].ResipesId)" class="form-control"></select>
+                                                <select asp-for="@Model.RecipeList[i].ResipesId" name="saturday" id="weekdayResipeId" asp-items="@Model.Recipe.ToSelectListItem(Model.RecipeList[i].ResipesId)" placeholder="Vælg opskrift" class="form-control"><option value="0">Vælg Opskrift</option></select>
                                             }
                                         </div>
                                     </div>
@@ -120,7 +120,7 @@
                                         <div class="col-9">
                                             @for (var i = 0; i < Model.RecipeList.Count(); i++)
                                             {
-                                                <select asp-for="@Model.RecipeList[i].ResipesId" id="ResipeId" asp-items="@Model.Recipe.ToSelectListItem(Model.RecipeList[i].ResipesId)" class="form-control"></select>
+                                                <select asp-for="@Model.RecipeList[i].ResipesId" name="sunday" id="weekdayResipeId" asp-items="@Model.Recipe.ToSelectListItem(Model.RecipeList[i].ResipesId)" placeholder="Vælg opskrift" class="form-control"><option value="0">Vælg Opskrift</option></select>
                                             }
                                         </div>
                                     </div>
@@ -135,11 +135,14 @@
                                     <ul class="list-group mb-3">
                                         @foreach (var details in Model.RecipeList)
                                         {
-                                            <li class="list-group-item d-flex justify-content-between">
-                                                <div>
-                                                    <h6 class="my-0">@details.Recipes.Name</h6>
-                                                </div>
-                                            </li>
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <div>
+                                                <h6 class="my-0">@details.Recipes.Name</h6>
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" name="recipePrint" value="@details.Recipes" />
+                                            </div>
+                                        </li>
                                         }
                                     </ul>
                                 </div>
@@ -149,7 +152,11 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-12 col-md-4 offset-md-8">
+                                <input type="submit" class="btn btn-info form-control" asp-route-id="@Model" value="Print" />
+                                @*<a asp-area="Users" asp-controller="UserWeekPlan" asp-action="Print"  class="btn btn-outline-info btn-sm" >Print</a>*@
+                                @*<button><link rel="stylesheet" href="~/css/styles-site-print.css" type="text/css" media="print" />Print</button>*@
                                 <button type="submit" id="btnWeekplan" onclick="return validateInput()" value="Weekplan" class="btn btn-success form-control">Gem ugeplan</button>
+
                             </div>
                         </div>
                     </div>
@@ -162,3 +169,31 @@
         <div class="backgroundWhiteBorder">Der er ikke lagt noget til listen...</div>
     }
 </form>
+
+@section Scripts{
+    <script>
+        
+        $(function () {
+            $("#weekpicker").datepicker({
+                showAnim: 'slideDown',
+                showButtonPanel: true,
+                numberOfMonths: 2,
+                showWeek: true,
+                weekHeader: "W"
+            }).datepicker("setDate", new Date());
+
+
+            $(function () {
+                $("#weekpicker").datepicker("option", "onSelect",
+                    function (value, date) {
+                        var week = $.datepicker.iso8601Week(
+                            new Date(date.selectedYear,
+                                date.selectedMonth,
+                                date.selectedDay));
+                        $(this).val(date.selectedYear + '-week-' + (week < 10 ? '0' : '') + week);
+                    }
+                );
+            });
+        });
+    </script>
+     }

@@ -6,7 +6,7 @@
 }
 
 <br />
-<h2 class="text-info">Opret Film</h2>
+<h2 class="text-info">Opret Opskrift</h2>
 <br />
 
 <form method="post" enctype="multipart/form-data">
@@ -71,9 +71,9 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><select asp-for="@Model.ingredientCollection.IngredientId" name="ingredient" id="IngredientId" asp-items="Model.Ingredient.ToSelectListItem(Model.ingredientCollection.IngredientId)" class="form-control"></select></td>
+                    <td><select placeholder="Vælg Ingrediens" asp-for="@Model.ingredientCollection.IngredientId" name="ingredient" id="IngredientId" asp-items="Model.Ingredient.ToSelectListItem(Model.ingredientCollection.IngredientId)" class="form-control"><option value="">Vælg Ingrediens</option></select></td>
                     <td><input type="number" name="measure" /></td>
-                    <td><select asp-for="@Model.ingredientCollection.MeasurmentUnitId" name="measurmenUnit" id="MeasurmentUnitId" asp-items="Model.MeasurmentUnit.ToSelectListItem(Model.ingredientCollection.MeasurmentUnitId)" class="form-control"></select></td>
+                    <td><select placeholder="Måle enhed" asp-for="@Model.ingredientCollection.MeasurmentUnitId" name="measurmenUnit" id="MeasurmentUnitId" asp-items="Model.MeasurmentUnit.ToSelectListItem(Model.ingredientCollection.MeasurmentUnitId)" class="form-control"><option value="">Måle enhed</option></select></td>
                 </tr>
             </tbody>
         </table>

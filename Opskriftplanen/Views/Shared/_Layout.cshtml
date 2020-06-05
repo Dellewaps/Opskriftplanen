@@ -46,7 +46,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" asp-action="Index" asp-controller="UserRecipe" asp-area="Users">Opskrift</a>
-                                <a class="dropdown-item">Madplan</a>
+                                <a class="dropdown-item" asp-action="Index" asp-controller="UserWeekPlan" asp-area="Users">Madplan</a>
                             </div>
                         </li>
                         @if (HttpContextAccessor.HttpContext.Session.GetInt32(@SD.ssRecipeListCount) != null)

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Opskriftplanen.Data;
 using Opskriftplanen.Models;
+using Opskriftplanen.Repository;
 using Opskriftplanen.Utility;
 
 namespace Opskriftplanen.Areas.Admin.Controllers
@@ -15,12 +16,23 @@ namespace Opskriftplanen.Areas.Admin.Controllers
     [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private ICategoryRepository _categoryRepository;
 
-        public CategoryController(ApplicationDbContext db)
+        public CategoryController()
         {
-            _db = db;
+            _categoryRepository = new CategoryRepository(new CategoryDbContext());
         }
+        public CategoryController(ICategoryRepository categoryRepository)
+        {
+            
+            _categoryRepository = categoryRepository;
+        }
+        //private readonly ApplicationDbContext _db;
+
+        //public CategoryController(ApplicationDbContext db)
+        //{
+        //    _db = db;
+        //}
 
         // for at få viewet til index med en liste af kategorier
         public async Task<IActionResult> Index()

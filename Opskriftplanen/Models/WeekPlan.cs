@@ -13,7 +13,7 @@ namespace Opskriftplanen.Models
         [Key]
         public int Id { get; set; }
 
-        public DateTime Week { get; set; }
+        public string Week { get; set; }
 
         public int Monday { get; set; }
 
@@ -27,11 +27,11 @@ namespace Opskriftplanen.Models
 
         public int Saturday { get; set; }
 
-        public int Sunday { get; set; }
+        public int Sunday { get; set; }        
 
-        [ForeignKey("RecipesId")]
-        public int RecipesId { get; set; }
+        public string ApplicationUserId { get; set; }
 
-        public Recipes Recipes { get; set; }
+        [ForeignKey("ApplicationUserId")]
+        public virtual ApplicationUsers ApplicationUser { get; set; }
     }
 }

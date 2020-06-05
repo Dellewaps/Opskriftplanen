@@ -71,9 +71,9 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><select asp-for="@Model.ingredientCollection.IngredientId" name="ingredient" id="IngredientId" asp-items="Model.Ingredient.ToSelectListItem(Model.ingredientCollection.IngredientId)" class="form-control"></select></td>
+                            <td><select asp-for="@Model.ingredientCollection.IngredientId" name="ingredient" id="IngredientId" asp-items="Model.Ingredient.ToSelectListItem(Model.ingredientCollection.IngredientId)" placeholder="Vælg Ingrediens" class="form-control"></select></td>
                             <td><input type="number" name="measure" /></td>
-                            <td><select asp-for="@Model.ingredientCollection.MeasurmentUnitId" name="measurmenUnit" id="MeasurmentUnitId" asp-items="Model.MeasurmentUnit.ToSelectListItem(Model.ingredientCollection.MeasurmentUnitId)" class="form-control"></select></td>
+                            <td><select asp-for="@Model.ingredientCollection.MeasurmentUnitId" name="measurmenUnit" id="MeasurmentUnitId" asp-items="Model.MeasurmentUnit.ToSelectListItem(Model.ingredientCollection.MeasurmentUnitId)" placeholder="Måle enhed" class="form-control"></select></td>
                         </tr>
                     </tbody>
                 </table>
